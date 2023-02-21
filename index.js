@@ -1,14 +1,16 @@
-var _a, _b, _c, _d;
+var _a, _b, _c, _d, _e;
 var currentUrl = new URL(String(window.location));
 var URLParams = currentUrl.searchParams;
 var url = window.location.protocol;
 var states = {
     "sort": (_a = URLParams.get("sort")) !== null && _a !== void 0 ? _a : "",
-    "filter": (_b = URLParams.get("filter")) !== null && _b !== void 0 ? _b : "",
-    "filter-low": (_c = URLParams.get("filter-low")) !== null && _c !== void 0 ? _c : "",
-    "filter-high": (_d = URLParams.get("filter-high")) !== null && _d !== void 0 ? _d : ""
+    "categories": (_b = URLParams.get("categories")) !== null && _b !== void 0 ? _b : "",
+    "filter": (_c = URLParams.get("filter")) !== null && _c !== void 0 ? _c : "",
+    "filter-low": (_d = URLParams.get("filter-low")) !== null && _d !== void 0 ? _d : "",
+    "filter-high": (_e = URLParams.get("filter-high")) !== null && _e !== void 0 ? _e : ""
 };
 var sorters = document.querySelectorAll('[data-params="sort"]');
+var categories = document.querySelectorAll('[data-params="categories"]');
 var _loop_1 = function (sorter) {
     sorter.style.cursor = "pointer";
     sorter.style.textDecoration = "underline";
@@ -21,9 +23,28 @@ var _loop_1 = function (sorter) {
         manipulateUrl();
     });
 };
+// @ts-ignore
 for (var _i = 0, sorters_1 = sorters; _i < sorters_1.length; _i++) {
     var sorter = sorters_1[_i];
     _loop_1(sorter);
+}
+var _loop_2 = function (category) {
+    category.style.cursor = "pointer";
+    category.style.textDecoration = "underline";
+    category.addEventListener('click', function () {
+        var _a, _b;
+        var params = (_a = category.dataset.params) !== null && _a !== void 0 ? _a : "";
+        var paramsValue = (_b = category.dataset.categoriesValue) !== null && _b !== void 0 ? _b : "";
+        // toggleURLParams(params, paramsValue);
+        // updateParams(params, paramsValue);
+        updateCategoryArray(paramsValue);
+        // manipulateUrl();
+    });
+};
+// @ts-ignore
+for (var _f = 0, categories_1 = categories; _f < categories_1.length; _f++) {
+    var category = categories_1[_f];
+    _loop_2(category);
 }
 var toggleURLParams = function (params, paramsValue) {
     var currentParams = URLParams.get(params);
@@ -34,18 +55,37 @@ var toggleURLParams = function (params, paramsValue) {
         location.href = url + "?";
     }
 };
+var updateCategoryArray = function (paramsValue) {
+    var urlCategories = states["categories"];
+    var categoryArray = [];
+    if (urlCategories === null || urlCategories === '') {
+        categoryArray = [];
+    }
+    else {
+        var stringCategoryArray_1 = urlCategories.split(",");
+        stringCategoryArray_1 = stringCategoryArray_1.filter(function (item, index) { return stringCategoryArray_1.indexOf(item) === index; });
+        categoryArray = stringCategoryArray_1.map(Number);
+    }
+    categoryArray.push(parseInt(paramsValue));
+    var index = categoryArray.indexOf(4);
+    categoryArray.splice(index, 1);
+    console.log(categoryArray);
+};
 var updateParams = function (params, paramsValue) {
     (params === "search") ? states["search"] = paramsValue : states["search"] = "";
+    (params === "categories") ? states["categories"] = paramsValue : states["categories"] = "";
     (params === "filter") ? states["filter"] = paramsValue : states["filter"] = "";
     (params === "filter-low") ? states["filter-low"] = paramsValue : states["filter-low"] = "";
     (params === "filter-high") ? states["filter-high"] = paramsValue : states["filter-high"] = "";
     (params === "sort") ? states["sort"] = paramsValue : states["sort"] = "";
 };
 var manipulateUrl = function () {
-    var stringURL = "?" + "search" + "=" + states["search"] +
-        "&" + "filter" + "=" + states["filter"] +
-        "&" + "filter-low" + "=" + states["filter-low"] +
-        "&" + "filter-high" + "=" + states["filter-high"] +
+    var stringURL = 
+    // "?" + "search" + "=" + states["search"] +
+    "?" + "categories" + "=" + states["categories"] +
+        // "&" + "filter" + "=" + states["filter"] +
+        // "&" + "filter-low" + "=" + states["filter-low"] +
+        // "&" + "filter-high" + "=" + states["filter-high"] +
         "&" + "sort" + "=" + states["sort"];
     location.href = url + stringURL;
 };
