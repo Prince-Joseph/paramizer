@@ -19,7 +19,9 @@ for (const sorter of sorters) {
   sorter.addEventListener('click', () => {
     let params = sorter.dataset.params as string ?? "";
     let paramsValue = sorter.dataset.sortValue as string ?? "";
-    toggleURLParams(params, paramsValue);
+    // toggleURLParams(params, paramsValue);
+    updateParams(params, paramsValue);
+    manipulateUrl();
   })
 
 }
@@ -36,7 +38,7 @@ var toggleURLParams = (params: string, paramsValue: string) => {
 
 var updateParams = (params: string, paramsValue: string) => {
 
-  (params === "sort") ? states["sort"] = paramsValue : states["sort"] = "";
+  (params === "search") ? states["search"] = paramsValue : states["search"] = "";
   (params === "filter") ? states["filter"] = paramsValue : states["filter"] = "";
   (params === "filter-low") ? states["filter-low"] = paramsValue : states["filter-low"] = "";
   (params === "filter-high") ? states["filter-high"] = paramsValue : states["filter-high"] = "";
@@ -47,7 +49,7 @@ var updateParams = (params: string, paramsValue: string) => {
 var manipulateUrl = () => {
 
   var stringURL =
-    "?" + "search" + "=" + states["sort"] +
+    "?" + "search" + "=" + states["search"] +
     "&" + "filter" + "=" + states["filter"] +
     "&" + "filter-low" + "=" + states["filter-low"] +
     "&" + "filter-high" + "=" + states["filter-high"] +

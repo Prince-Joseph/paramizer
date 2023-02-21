@@ -16,7 +16,9 @@ var _loop_1 = function (sorter) {
         var _a, _b;
         var params = (_a = sorter.dataset.params) !== null && _a !== void 0 ? _a : "";
         var paramsValue = (_b = sorter.dataset.sortValue) !== null && _b !== void 0 ? _b : "";
-        toggleURLParams(params, paramsValue);
+        // toggleURLParams(params, paramsValue);
+        updateParams(params, paramsValue);
+        manipulateUrl();
     });
 };
 for (var _i = 0, sorters_1 = sorters; _i < sorters_1.length; _i++) {
@@ -33,14 +35,14 @@ var toggleURLParams = function (params, paramsValue) {
     }
 };
 var updateParams = function (params, paramsValue) {
-    (params === "sort") ? states["sort"] = paramsValue : states["sort"] = "";
+    (params === "search") ? states["search"] = paramsValue : states["search"] = "";
     (params === "filter") ? states["filter"] = paramsValue : states["filter"] = "";
     (params === "filter-low") ? states["filter-low"] = paramsValue : states["filter-low"] = "";
     (params === "filter-high") ? states["filter-high"] = paramsValue : states["filter-high"] = "";
     (params === "sort") ? states["sort"] = paramsValue : states["sort"] = "";
 };
 var manipulateUrl = function () {
-    var stringURL = "?" + "search" + "=" + states["sort"] +
+    var stringURL = "?" + "search" + "=" + states["search"] +
         "&" + "filter" + "=" + states["filter"] +
         "&" + "filter-low" + "=" + states["filter-low"] +
         "&" + "filter-high" + "=" + states["filter-high"] +
