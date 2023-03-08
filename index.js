@@ -1,4 +1,4 @@
-var _a, _b, _c, _d, _e, _f, _g;
+var _a, _b, _c, _d, _e, _f, _g, _h;
 var currentUrl = new URL(String(window.location));
 var URLParams = currentUrl.searchParams;
 var url = window.location.protocol;
@@ -10,6 +10,7 @@ var filterButton = document.querySelector('[data-params="filter"]');
 var filterLow = document.querySelector('#filter-low');
 var filterHigh = document.querySelector('#filter-high');
 var sorters = document.querySelectorAll('[data-params="sort"]');
+var pagelinks = document.querySelectorAll('[data-params="page"]');
 var paramsClearers = document.querySelectorAll('[data-clear]');
 var states = {
     "search": (_a = URLParams.get("search")) !== null && _a !== void 0 ? _a : "",
@@ -18,7 +19,8 @@ var states = {
     "filter": (_d = URLParams.get("filter")) !== null && _d !== void 0 ? _d : "",
     "filter-low": (_e = URLParams.get("filter-low")) !== null && _e !== void 0 ? _e : "",
     "filter-high": (_f = URLParams.get("filter-high")) !== null && _f !== void 0 ? _f : "",
-    "sort": (_g = URLParams.get("sort")) !== null && _g !== void 0 ? _g : ""
+    "sort": (_g = URLParams.get("sort")) !== null && _g !== void 0 ? _g : "",
+    "page": (_h = URLParams.get("page")) !== null && _h !== void 0 ? _h : ""
 };
 var categoryArray = [];
 /* -------------------- *\
@@ -124,8 +126,8 @@ var _loop_2 = function (statusFilter) {
 
 \* -------------------- */
 // @ts-ignore
-for (var _h = 0, statusFilters_1 = statusFilters; _h < statusFilters_1.length; _h++) {
-    var statusFilter = statusFilters_1[_h];
+for (var _j = 0, statusFilters_1 = statusFilters; _j < statusFilters_1.length; _j++) {
+    var statusFilter = statusFilters_1[_j];
     _loop_2(statusFilter);
 }
 /* -------------------- *\
@@ -180,11 +182,33 @@ var _loop_3 = function (sorter) {
   data-params="sort"  data-sort-value="gh"
 \* -------------------- */
 // @ts-ignore
-for (var _j = 0, sorters_1 = sorters; _j < sorters_1.length; _j++) {
-    var sorter = sorters_1[_j];
+for (var _k = 0, sorters_1 = sorters; _k < sorters_1.length; _k++) {
+    var sorter = sorters_1[_k];
     _loop_3(sorter);
 }
-var _loop_4 = function (clearBtn) {
+var _loop_4 = function (pagelink) {
+    pagelink.style.cursor = "pointer";
+    pagelink.style.textDecoration = "underline";
+    pagelink.addEventListener('click', function () {
+        var _a, _b;
+        var params = (_a = pagelink.dataset.params) !== null && _a !== void 0 ? _a : "";
+        var paramsValue = (_b = pagelink.dataset.pageNumber) !== null && _b !== void 0 ? _b : "";
+        updateParams(params, paramsValue);
+        manipulateUrl();
+    });
+};
+/* -------------------- *\
+  Pagination
+  data-params="page"  data-page-number="69"
+  data-params="page"  data-page-number="{{ current_page_number }}"
+  data-params="page"  data-page-number="{{ qs.next_page_number }}"
+\* -------------------- */
+// @ts-ignore
+for (var _l = 0, pagelinks_1 = pagelinks; _l < pagelinks_1.length; _l++) {
+    var pagelink = pagelinks_1[_l];
+    _loop_4(pagelink);
+}
+var _loop_5 = function (clearBtn) {
     clearBtn.addEventListener('click', function () {
         var _a;
         var params = (_a = clearBtn.dataset.clear) !== null && _a !== void 0 ? _a : "";
@@ -196,9 +220,9 @@ var _loop_4 = function (clearBtn) {
 /* -------------------- *\
   Creating Clear Buttons
 \* -------------------- */
-for (var _k = 0, paramsClearers_1 = paramsClearers; _k < paramsClearers_1.length; _k++) {
-    var clearBtn = paramsClearers_1[_k];
-    _loop_4(clearBtn);
+for (var _m = 0, paramsClearers_1 = paramsClearers; _m < paramsClearers_1.length; _m++) {
+    var clearBtn = paramsClearers_1[_m];
+    _loop_5(clearBtn);
 }
 /* -------------------- *\
   Update State
@@ -227,6 +251,9 @@ var updateParams = function (params, paramsValue) {
             case "sort":
                 states["sort"] = paramsValue;
                 break;
+            case "page":
+                states["page"] = paramsValue;
+                break;
             default:
             // code block
         }
@@ -246,6 +273,7 @@ var manipulateUrl = function () {
         "&" + "filter" + "=" + states["filter"] +
         "&" + "filter-low" + "=" + states["filter-low"] +
         "&" + "filter-high" + "=" + states["filter-high"] +
-        "&" + "sort" + "=" + states["sort"];
+        "&" + "sort" + "=" + states["sort"] +
+        "&" + "page" + "=" + states["page"];
     location.href = url + stringURL;
 };
