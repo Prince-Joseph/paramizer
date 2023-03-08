@@ -231,6 +231,9 @@ for (const pagelink of pagelinks) {
 
 /* -------------------- *\
   Creating Clear Buttons
+  <button data-clear="filter">clear</button>
+  <button data-clear="sort">clear</button>
+  <button data-clear="status">clear</button>
 \* -------------------- */
 for (const clearBtn of paramsClearers) {
   clearBtn.addEventListener('click', () => {
