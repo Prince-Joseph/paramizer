@@ -3,12 +3,15 @@ var URLParams = currentUrl.searchParams;
 var url = window.location.protocol;
 
 var states = {
-  "sort": URLParams.get("sort") ?? "",
+  "search": URLParams.get("search") ?? "",
   "categories": URLParams.get("categories") ?? "",
   "filter": URLParams.get("filter") ?? "",
   "filter-low": URLParams.get("filter-low") ?? "",
-  "filter-high": URLParams.get("filter-high") ?? ""
+  "filter-high": URLParams.get("filter-high") ?? "",
+  "sort": URLParams.get("sort") ?? "",
 }
+
+let categoryArray: Number[] = [];
 
 var sorters = document.querySelectorAll('[data-params="sort"]') as NodeListOf<HTMLDataElement>;
 var categories = document.querySelectorAll('[data-params="categories"]') as NodeListOf<HTMLDataElement>;
@@ -38,10 +41,9 @@ for (const category of categories) {
   category.addEventListener('click', () => {
     let params = category.dataset.params as string ?? "";
     let paramsValue = category.dataset.categoriesValue as string ?? "";
-    // toggleURLParams(params, paramsValue);
-    // updateParams(params, paramsValue);
+
     updateCategoryArray(paramsValue);
-    // manipulateUrl();
+    manipulateUrl();
   })
 
 }
@@ -56,27 +58,35 @@ var toggleURLParams = (params: string, paramsValue: string) => {
   }
 }
 
-var updateCategoryArray = (paramsValue:string) =>{
+var updateCategoryArray = (paramsValue: string) => {
+  let categoryValue  = parseInt(paramsValue) as number;
   let urlCategories = states["categories"];
-  let categoryArray: Number[] = [];
-  if (urlCategories === null || urlCategories === ''){
+  // let categoryArray: Number[] = [];
+  if (urlCategories === null || urlCategories === '') {
     categoryArray = [];
   }
-  else{
-    let stringCategoryArray: string[] = urlCategories.split(",");
-    stringCategoryArray = stringCategoryArray.filter((item:string, index) => stringCategoryArray.indexOf(item) === index);
+  else {
+
+    console.log(urlCategories);
+    
+    let stringCategoryArray: string[] = urlCategories.toString().split(",");
+    console.log(urlCategories);
+    stringCategoryArray = stringCategoryArray.filter((item: string, index) => stringCategoryArray.indexOf(item) === index);
     categoryArray = stringCategoryArray.map(Number) as Number[];
   }
+  
+  // only unique
+  categoryArray = categoryArray.filter((value, index, array) => array.indexOf(value) === index);
 
-  categoryArray.push(parseInt(paramsValue))
-  let index = categoryArray.indexOf(4)
-  categoryArray.splice(index,1)
+  // add or remove items
+  categoryArray.indexOf(categoryValue) === -1 ? categoryArray.push(categoryValue) : categoryArray.splice(categoryArray.indexOf(categoryValue), 1);
 
-  console.log(categoryArray);
-
+  let urlCategoryString = categoryArray.toString()
+  updateParams("categories", urlCategoryString);
+  manipulateUrl();
 }
 
-var updateParams = (params: string, paramsValue: string) => {
+var updateParams = (params: string, paramsValue: any) => {
 
   (params === "search") ? states["search"] = paramsValue : states["search"] = "";
   (params === "categories") ? states["categories"] = paramsValue : states["categories"] = "";

@@ -1,14 +1,16 @@
-var _a, _b, _c, _d, _e;
+var _a, _b, _c, _d, _e, _f;
 var currentUrl = new URL(String(window.location));
 var URLParams = currentUrl.searchParams;
 var url = window.location.protocol;
 var states = {
-    "sort": (_a = URLParams.get("sort")) !== null && _a !== void 0 ? _a : "",
+    "search": (_a = URLParams.get("search")) !== null && _a !== void 0 ? _a : "",
     "categories": (_b = URLParams.get("categories")) !== null && _b !== void 0 ? _b : "",
     "filter": (_c = URLParams.get("filter")) !== null && _c !== void 0 ? _c : "",
     "filter-low": (_d = URLParams.get("filter-low")) !== null && _d !== void 0 ? _d : "",
-    "filter-high": (_e = URLParams.get("filter-high")) !== null && _e !== void 0 ? _e : ""
+    "filter-high": (_e = URLParams.get("filter-high")) !== null && _e !== void 0 ? _e : "",
+    "sort": (_f = URLParams.get("sort")) !== null && _f !== void 0 ? _f : ""
 };
+var categoryArray = [];
 var sorters = document.querySelectorAll('[data-params="sort"]');
 var categories = document.querySelectorAll('[data-params="categories"]');
 var _loop_1 = function (sorter) {
@@ -35,15 +37,13 @@ var _loop_2 = function (category) {
         var _a, _b;
         var params = (_a = category.dataset.params) !== null && _a !== void 0 ? _a : "";
         var paramsValue = (_b = category.dataset.categoriesValue) !== null && _b !== void 0 ? _b : "";
-        // toggleURLParams(params, paramsValue);
-        // updateParams(params, paramsValue);
         updateCategoryArray(paramsValue);
-        // manipulateUrl();
+        manipulateUrl();
     });
 };
 // @ts-ignore
-for (var _f = 0, categories_1 = categories; _f < categories_1.length; _f++) {
-    var category = categories_1[_f];
+for (var _g = 0, categories_1 = categories; _g < categories_1.length; _g++) {
+    var category = categories_1[_g];
     _loop_2(category);
 }
 var toggleURLParams = function (params, paramsValue) {
@@ -56,20 +56,26 @@ var toggleURLParams = function (params, paramsValue) {
     }
 };
 var updateCategoryArray = function (paramsValue) {
+    var categoryValue = parseInt(paramsValue);
     var urlCategories = states["categories"];
-    var categoryArray = [];
+    // let categoryArray: Number[] = [];
     if (urlCategories === null || urlCategories === '') {
         categoryArray = [];
     }
     else {
-        var stringCategoryArray_1 = urlCategories.split(",");
+        console.log(urlCategories);
+        var stringCategoryArray_1 = urlCategories.toString().split(",");
+        console.log(urlCategories);
         stringCategoryArray_1 = stringCategoryArray_1.filter(function (item, index) { return stringCategoryArray_1.indexOf(item) === index; });
         categoryArray = stringCategoryArray_1.map(Number);
     }
-    categoryArray.push(parseInt(paramsValue));
-    var index = categoryArray.indexOf(4);
-    categoryArray.splice(index, 1);
-    console.log(categoryArray);
+    // only unique
+    categoryArray = categoryArray.filter(function (value, index, array) { return array.indexOf(value) === index; });
+    // add or remove items
+    categoryArray.indexOf(categoryValue) === -1 ? categoryArray.push(categoryValue) : categoryArray.splice(categoryArray.indexOf(categoryValue), 1);
+    var urlCategoryString = categoryArray.toString();
+    updateParams("categories", urlCategoryString);
+    manipulateUrl();
 };
 var updateParams = function (params, paramsValue) {
     (params === "search") ? states["search"] = paramsValue : states["search"] = "";
