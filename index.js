@@ -2,6 +2,8 @@ var _a, _b, _c, _d, _e, _f;
 var currentUrl = new URL(String(window.location));
 var URLParams = currentUrl.searchParams;
 var url = window.location.protocol;
+var sorters = document.querySelectorAll('[data-params="sort"]');
+var categories = document.querySelectorAll('[data-params="categories"]');
 var states = {
     "search": (_a = URLParams.get("search")) !== null && _a !== void 0 ? _a : "",
     "categories": (_b = URLParams.get("categories")) !== null && _b !== void 0 ? _b : "",
@@ -11,8 +13,6 @@ var states = {
     "sort": (_f = URLParams.get("sort")) !== null && _f !== void 0 ? _f : ""
 };
 var categoryArray = [];
-var sorters = document.querySelectorAll('[data-params="sort"]');
-var categories = document.querySelectorAll('[data-params="categories"]');
 var _loop_1 = function (sorter) {
     sorter.style.cursor = "pointer";
     sorter.style.textDecoration = "underline";
@@ -20,7 +20,6 @@ var _loop_1 = function (sorter) {
         var _a, _b;
         var params = (_a = sorter.dataset.params) !== null && _a !== void 0 ? _a : "";
         var paramsValue = (_b = sorter.dataset.sortValue) !== null && _b !== void 0 ? _b : "";
-        // toggleURLParams(params, paramsValue);
         updateParams(params, paramsValue);
         manipulateUrl();
     });
@@ -46,15 +45,6 @@ for (var _g = 0, categories_1 = categories; _g < categories_1.length; _g++) {
     var category = categories_1[_g];
     _loop_2(category);
 }
-var toggleURLParams = function (params, paramsValue) {
-    var currentParams = URLParams.get(params);
-    if (currentParams !== paramsValue) {
-        location.href = url + "?" + params + "=" + paramsValue;
-    }
-    else {
-        location.href = url + "?";
-    }
-};
 var updateCategoryArray = function (paramsValue) {
     var categoryValue = parseInt(paramsValue);
     var urlCategories = states["categories"];
@@ -75,23 +65,38 @@ var updateCategoryArray = function (paramsValue) {
     categoryArray.indexOf(categoryValue) === -1 ? categoryArray.push(categoryValue) : categoryArray.splice(categoryArray.indexOf(categoryValue), 1);
     var urlCategoryString = categoryArray.toString();
     updateParams("categories", urlCategoryString);
-    manipulateUrl();
 };
 var updateParams = function (params, paramsValue) {
-    (params === "search") ? states["search"] = paramsValue : states["search"] = "";
-    (params === "categories") ? states["categories"] = paramsValue : states["categories"] = "";
-    (params === "filter") ? states["filter"] = paramsValue : states["filter"] = "";
-    (params === "filter-low") ? states["filter-low"] = paramsValue : states["filter-low"] = "";
-    (params === "filter-high") ? states["filter-high"] = paramsValue : states["filter-high"] = "";
-    (params === "sort") ? states["sort"] = paramsValue : states["sort"] = "";
+    switch (params) {
+        case "sort":
+            states["sort"] = paramsValue;
+            break;
+        case "categories":
+            states["categories"] = paramsValue;
+            break;
+        case "search":
+            states["search"] = paramsValue;
+            break;
+        case "filter":
+            states["filter"] = paramsValue;
+            break;
+        case "filter-low":
+            states["filter-low"] = paramsValue;
+            break;
+        case "filter-high":
+            states["filter-high"] = paramsValue;
+            break;
+        default:
+        // code block
+    }
+    console.log(states);
 };
 var manipulateUrl = function () {
-    var stringURL = 
-    // "?" + "search" + "=" + states["search"] +
-    "?" + "categories" + "=" + states["categories"] +
-        // "&" + "filter" + "=" + states["filter"] +
-        // "&" + "filter-low" + "=" + states["filter-low"] +
-        // "&" + "filter-high" + "=" + states["filter-high"] +
+    var stringURL = "?" + "search" + "=" + states["search"] +
+        "&" + "categories" + "=" + states["categories"] +
+        "&" + "filter" + "=" + states["filter"] +
+        "&" + "filter-low" + "=" + states["filter-low"] +
+        "&" + "filter-high" + "=" + states["filter-high"] +
         "&" + "sort" + "=" + states["sort"];
     location.href = url + stringURL;
 };

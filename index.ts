@@ -2,6 +2,10 @@ var currentUrl = new URL(String(window.location));
 var URLParams = currentUrl.searchParams;
 var url = window.location.protocol;
 
+var sorters = document.querySelectorAll('[data-params="sort"]') as NodeListOf<HTMLDataElement>;
+var categories = document.querySelectorAll('[data-params="categories"]') as NodeListOf<HTMLDataElement>;
+
+
 var states = {
   "search": URLParams.get("search") ?? "",
   "categories": URLParams.get("categories") ?? "",
@@ -13,8 +17,6 @@ var states = {
 
 let categoryArray: Number[] = [];
 
-var sorters = document.querySelectorAll('[data-params="sort"]') as NodeListOf<HTMLDataElement>;
-var categories = document.querySelectorAll('[data-params="categories"]') as NodeListOf<HTMLDataElement>;
 
 // @ts-ignore
 for (const sorter of sorters) {
@@ -25,7 +27,6 @@ for (const sorter of sorters) {
   sorter.addEventListener('click', () => {
     let params = sorter.dataset.params as string ?? "";
     let paramsValue = sorter.dataset.sortValue as string ?? "";
-    // toggleURLParams(params, paramsValue);
     updateParams(params, paramsValue);
     manipulateUrl();
   })
@@ -46,16 +47,6 @@ for (const category of categories) {
     manipulateUrl();
   })
 
-}
-
-var toggleURLParams = (params: string, paramsValue: string) => {
-  let currentParams = URLParams.get(params);
-  if (currentParams !== paramsValue) {
-    location.href = url + "?" + params + "=" + paramsValue;
-  }
-  else {
-    location.href = url + "?";
-  }
 }
 
 var updateCategoryArray = (paramsValue: string) => {
@@ -83,28 +74,42 @@ var updateCategoryArray = (paramsValue: string) => {
 
   let urlCategoryString = categoryArray.toString()
   updateParams("categories", urlCategoryString);
-  manipulateUrl();
 }
 
 var updateParams = (params: string, paramsValue: any) => {
-
-  (params === "search") ? states["search"] = paramsValue : states["search"] = "";
-  (params === "categories") ? states["categories"] = paramsValue : states["categories"] = "";
-  (params === "filter") ? states["filter"] = paramsValue : states["filter"] = "";
-  (params === "filter-low") ? states["filter-low"] = paramsValue : states["filter-low"] = "";
-  (params === "filter-high") ? states["filter-high"] = paramsValue : states["filter-high"] = "";
-  (params === "sort") ? states["sort"] = paramsValue : states["sort"] = "";
-
+  switch(params) {
+    case "sort":
+      states["sort"] = paramsValue
+      break;
+    case "categories":
+      states["categories"] = paramsValue
+      break;
+    case "search":
+      states["search"] = paramsValue
+      break;
+    case "filter":
+      states["filter"] = paramsValue
+      break;
+    case "filter-low":
+      states["filter-low"] = paramsValue
+      break;
+    case "filter-high":
+      states["filter-high"] = paramsValue
+      break;
+    default:
+      // code block
+    }
+    console.log(states)
 }
 
 var manipulateUrl = () => {
 
   var stringURL =
-    // "?" + "search" + "=" + states["search"] +
-    "?" + "categories" + "=" + states["categories"] +
-    // "&" + "filter" + "=" + states["filter"] +
-    // "&" + "filter-low" + "=" + states["filter-low"] +
-    // "&" + "filter-high" + "=" + states["filter-high"] +
+    "?" + "search" + "=" + states["search"] +
+    "&" + "categories" + "=" + states["categories"] +
+    "&" + "filter" + "=" + states["filter"] +
+    "&" + "filter-low" + "=" + states["filter-low"] +
+    "&" + "filter-high" + "=" + states["filter-high"] +
     "&" + "sort" + "=" + states["sort"];
 
   location.href = url + stringURL;
