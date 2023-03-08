@@ -170,6 +170,9 @@ var _loop_3 = function (clearBtn) {
 };
 /* -------------------- *\
   Creating Clear Buttons
+  <button data-clear="filter">clear</button>
+  <button data-clear="sort">clear</button>
+  <button data-clear="status">clear</button>
 \* -------------------- */
 for (var _h = 0, paramsClearers_1 = paramsClearers; _h < paramsClearers_1.length; _h++) {
     var clearBtn = paramsClearers_1[_h];
