@@ -220,6 +220,7 @@ var _loop_5 = function (clearBtn) {
 /* -------------------- *\
   Creating Clear Buttons
 \* -------------------- */
+//@ts-ignore
 for (var _m = 0, paramsClearers_1 = paramsClearers; _m < paramsClearers_1.length; _m++) {
     var clearBtn = paramsClearers_1[_m];
     _loop_5(clearBtn);
@@ -228,38 +229,41 @@ for (var _m = 0, paramsClearers_1 = paramsClearers; _m < paramsClearers_1.length
   Update State
 \* -------------------- */
 var updateParams = function (params, paramsValue) {
-    if (states[params] !== paramsValue) {
-        switch (params) {
-            case "search":
-                states["search"] = paramsValue;
-                break;
-            case "categories":
-                states["categories"] = paramsValue;
-                break;
-            case "status":
-                states["status"] = paramsValue;
-                break;
-            case "filter":
-                states["filter"] = paramsValue;
-                break;
-            case "filter-low":
-                states["filter-low"] = paramsValue;
-                break;
-            case "filter-high":
-                states["filter-high"] = paramsValue;
-                break;
-            case "sort":
-                states["sort"] = paramsValue;
-                break;
-            case "page":
-                states["page"] = paramsValue;
-                break;
-            default:
-            // code block
-        }
-    }
-    else {
-        updateParams(params, "");
+    switch (params) {
+        case "search":
+            states["search"] = paramsValue;
+            break;
+        case "filter-low":
+            states["filter-low"] = paramsValue;
+            break;
+        case "filter-high":
+            states["filter-high"] = paramsValue;
+            break;
+        case "page":
+            states["page"] = paramsValue;
+            break;
+        default:
+            if (states[params] !== paramsValue) {
+                switch (params) {
+                    case "sort":
+                        states["sort"] = paramsValue;
+                        break;
+                    case "categories":
+                        states["categories"] = paramsValue;
+                        break;
+                    case "status":
+                        states["status"] = paramsValue;
+                        break;
+                    case "filter":
+                        states["filter"] = paramsValue;
+                        break;
+                    default:
+                        break;
+                }
+            }
+            else {
+                updateParams(params, "");
+            }
     }
     // console.log(states)
 };
