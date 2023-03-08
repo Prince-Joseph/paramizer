@@ -2,6 +2,8 @@ var _a, _b, _c, _d, _e, _f;
 var currentUrl = new URL(String(window.location));
 var URLParams = currentUrl.searchParams;
 var url = window.location.protocol;
+var search = document.getElementById('search');
+var searchButton = document.getElementById('search-button');
 var sorters = document.querySelectorAll('[data-params="sort"]');
 var categories = document.querySelectorAll('[data-params="categories"]');
 var states = {
@@ -66,6 +68,31 @@ var updateCategoryArray = function (paramsValue) {
     var urlCategoryString = categoryArray.toString();
     updateParams("categories", urlCategoryString);
 };
+if (search) {
+    function setSearchParams() {
+        var _a, _b;
+        var params = (_a = "search") !== null && _a !== void 0 ? _a : "";
+        var paramsValue = (_b = search.value) !== null && _b !== void 0 ? _b : "";
+        updateParams(params, paramsValue);
+        manipulateUrl();
+    }
+    if (searchButton) {
+        searchButton.addEventListener('click', function () {
+            setSearchParams();
+        });
+    }
+    if (search) {
+        if (states["search"]) {
+            search.value = states["search"];
+        }
+        search.addEventListener('keypress', function (event) {
+            if (event.key === "Enter") {
+                // event.preventDefault();
+                setSearchParams();
+            }
+        });
+    }
+}
 var updateParams = function (params, paramsValue) {
     switch (params) {
         case "sort":
