@@ -235,6 +235,7 @@ for (const pagelink of pagelinks) {
   <button data-clear="sort">clear</button>
   <button data-clear="status">clear</button>
 \* -------------------- */
+//@ts-ignore
 for (const clearBtn of paramsClearers) {
   clearBtn.addEventListener('click', () => {
     let params = clearBtn.dataset.clear ?? "";
@@ -250,39 +251,45 @@ for (const clearBtn of paramsClearers) {
   Update State
 \* -------------------- */
 var updateParams = (params: string, paramsValue: any) => {
-  if (states[params] !== paramsValue) {
+  
     switch (params) {
       case "search":
         states["search"] = paramsValue
         break;
-      case "categories":
-        states["categories"] = paramsValue
-        break;
-      case "status":
-        states["status"] = paramsValue
-        break;
-      case "filter":
-        states["filter"] = paramsValue
-        break;
+
       case "filter-low":
         states["filter-low"] = paramsValue
         break;
       case "filter-high":
         states["filter-high"] = paramsValue
         break;
-      case "sort":
-        states["sort"] = paramsValue
-        break;
       case "page":
         states["page"] = paramsValue
         break;
       default:
-      // code block
+        if (states[params] !== paramsValue) {
+        switch (params) {
+          case "sort":
+              states["sort"] = paramsValue
+              break;
+          case "categories":
+            states["categories"] = paramsValue
+            break;
+          case "status":
+            states["status"] = paramsValue
+            break;
+          case "filter":
+            states["filter"] = paramsValue
+            break;
+          default:
+            break;
+        }
     }
-  }
   else {
     updateParams(params, "");
   }
+}
+
   // console.log(states)
 }
 
