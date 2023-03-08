@@ -69,15 +69,15 @@ if (search) {
 
   Individual Categories
    data-params = "categories"
-   data-categories-value = "1"
+   data-category-id = "1"
 
    Individual Categories
    data-params = "categories"
-   data-categories-value = "2"
+   data-category-id = "2"
 
    Individual Categories
    data-params = "categories"
-   data-categories-value = "3"
+   data-category-id = "3"
 
 \* -------------------- */
 
@@ -89,7 +89,7 @@ for (const category of categories) {
 
   category.addEventListener('click', () => {
     let params = category.dataset.params as string ?? "";
-    let paramsValue = category.dataset.categoriesValue as string ?? "";
+    let paramsValue = category.dataset.categoryId as string ?? "";
 
     updateCategoryArray(paramsValue);
     manipulateUrl();
