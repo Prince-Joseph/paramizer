@@ -59,7 +59,7 @@ var _loop_1 = function (category) {
     category.addEventListener('click', function () {
         var _a, _b;
         var params = (_a = category.dataset.params) !== null && _a !== void 0 ? _a : "";
-        var paramsValue = (_b = category.dataset.categoriesValue) !== null && _b !== void 0 ? _b : "";
+        var paramsValue = (_b = category.dataset.categoryId) !== null && _b !== void 0 ? _b : "";
         updateCategoryArray(paramsValue);
         manipulateUrl();
     });
@@ -68,15 +68,15 @@ var _loop_1 = function (category) {
 
   Individual Categories
    data-params = "categories"
-   data-categories-value = "1"
+   data-category-id = "1"
 
    Individual Categories
    data-params = "categories"
-   data-categories-value = "2"
+   data-category-id = "2"
 
    Individual Categories
    data-params = "categories"
-   data-categories-value = "3"
+   data-category-id = "3"
 
 \* -------------------- */
 // @ts-ignore
