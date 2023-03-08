@@ -4,8 +4,11 @@ var URLParams = currentUrl.searchParams;
 var url = window.location.protocol;
 var search = document.getElementById('search');
 var searchButton = document.getElementById('search-button');
-var sorters = document.querySelectorAll('[data-params="sort"]');
 var categories = document.querySelectorAll('[data-params="categories"]');
+var filterButton = document.querySelector('[data-params="filter"]');
+var filterLow = document.querySelector('#filter-low');
+var filterHigh = document.querySelector('#filter-high');
+var sorters = document.querySelectorAll('[data-params="sort"]');
 var states = {
     "search": (_a = URLParams.get("search")) !== null && _a !== void 0 ? _a : "",
     "categories": (_b = URLParams.get("categories")) !== null && _b !== void 0 ? _b : "",
@@ -14,6 +17,7 @@ var states = {
     "filter-high": (_e = URLParams.get("filter-high")) !== null && _e !== void 0 ? _e : "",
     "sort": (_f = URLParams.get("sort")) !== null && _f !== void 0 ? _f : ""
 };
+console.log(states);
 var categoryArray = [];
 var _loop_1 = function (sorter) {
     sorter.style.cursor = "pointer";
@@ -50,12 +54,10 @@ for (var _g = 0, categories_1 = categories; _g < categories_1.length; _g++) {
 var updateCategoryArray = function (paramsValue) {
     var categoryValue = parseInt(paramsValue);
     var urlCategories = states["categories"];
-    // let categoryArray: Number[] = [];
     if (urlCategories === null || urlCategories === '') {
         categoryArray = [];
     }
     else {
-        console.log(urlCategories);
         var stringCategoryArray_1 = urlCategories.toString().split(",");
         console.log(urlCategories);
         stringCategoryArray_1 = stringCategoryArray_1.filter(function (item, index) { return stringCategoryArray_1.indexOf(item) === index; });
@@ -92,6 +94,27 @@ if (search) {
             }
         });
     }
+}
+if (filterButton) {
+    if (filterLow) {
+        if (states["filter-low"]) {
+            filterLow.value = states["filter-low"];
+        }
+    }
+    if (filterHigh) {
+        if (states["filter-high"]) {
+            filterHigh.value = states["filter-high"];
+        }
+    }
+    filterButton.addEventListener('click', function () {
+        var _a, _b;
+        var params = (_a = filterButton.dataset.params) !== null && _a !== void 0 ? _a : "";
+        var paramsValue = (_b = filterButton.dataset.filterValue) !== null && _b !== void 0 ? _b : "";
+        updateParams("filter-low", filterLow.value);
+        updateParams("filter-high", filterHigh.value);
+        updateParams(params, paramsValue);
+        manipulateUrl();
+    });
 }
 var updateParams = function (params, paramsValue) {
     switch (params) {

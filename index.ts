@@ -4,8 +4,15 @@ var url = window.location.protocol;
 
 var search = document.getElementById('search') as HTMLInputElement;
 var searchButton = document.getElementById('search-button') as HTMLElement;
-var sorters = document.querySelectorAll('[data-params="sort"]') as NodeListOf<HTMLDataElement>;
+
 var categories = document.querySelectorAll('[data-params="categories"]') as NodeListOf<HTMLDataElement>;
+
+var filterButton = document.querySelector('[data-params="filter"]') as HTMLDataElement;
+var filterLow = document.querySelector('#filter-low') as HTMLInputElement;
+var filterHigh = document.querySelector('#filter-high') as HTMLInputElement;
+
+
+var sorters = document.querySelectorAll('[data-params="sort"]') as NodeListOf<HTMLDataElement>;
 
 
 var states = {
@@ -16,6 +23,8 @@ var states = {
   "filter-high": URLParams.get("filter-high") ?? "",
   "sort": URLParams.get("sort") ?? "",
 }
+console.log(states);
+
 
 let categoryArray: Number[] = [];
 
@@ -54,14 +63,11 @@ for (const category of categories) {
 var updateCategoryArray = (paramsValue: string) => {
   let categoryValue = parseInt(paramsValue) as number;
   let urlCategories = states["categories"];
-  // let categoryArray: Number[] = [];
+
   if (urlCategories === null || urlCategories === '') {
     categoryArray = [];
   }
   else {
-
-    console.log(urlCategories);
-
     let stringCategoryArray: string[] = urlCategories.toString().split(",");
     console.log(urlCategories);
     stringCategoryArray = stringCategoryArray.filter((item: string, index) => stringCategoryArray.indexOf(item) === index);
@@ -93,9 +99,8 @@ if (search) {
     })
   }
 
-
   if (search) {
-    if (states["search"]){
+    if (states["search"]) {
       search.value = states["search"];
     }
     search.addEventListener('keypress', (event) => {
@@ -106,6 +111,31 @@ if (search) {
     })
   }
 
+}
+
+
+if (filterButton) {
+
+  if (filterLow) {
+    if (states["filter-low"]) {
+      filterLow.value = states["filter-low"];
+    }
+  }
+  if (filterHigh) {
+    if (states["filter-high"]) {
+      filterHigh.value = states["filter-high"];
+    }
+  }
+
+  filterButton.addEventListener('click', () => {
+    let params = filterButton.dataset.params as string ?? "";
+    let paramsValue = filterButton.dataset.filterValue as string ?? "";
+
+    updateParams("filter-low", filterLow.value);
+    updateParams("filter-high", filterHigh.value);
+    updateParams(params, paramsValue);
+    manipulateUrl();
+  })
 }
 
 var updateParams = (params: string, paramsValue: any) => {
