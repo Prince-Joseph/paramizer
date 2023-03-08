@@ -13,6 +13,7 @@ var filterHigh = document.querySelector('#filter-high') as HTMLInputElement;
 
 
 var sorters = document.querySelectorAll('[data-params="sort"]') as NodeListOf<HTMLDataElement>;
+var paramsClearers = document.querySelectorAll('[data-clear]') as NodeListOf<HTMLDataElement>;
 
 
 var states = {
@@ -116,14 +117,17 @@ if (search) {
 
 if (filterButton) {
 
-  if (filterLow) {
-    if (states["filter-low"]) {
-      filterLow.value = states["filter-low"];
+  if (states["filter"] !== "") {
+
+    if (filterLow) {
+      if (states["filter-low"]) {
+        filterLow.value = states["filter-low"];
+      }
     }
-  }
-  if (filterHigh) {
-    if (states["filter-high"]) {
-      filterHigh.value = states["filter-high"];
+    if (filterHigh) {
+      if (states["filter-high"]) {
+        filterHigh.value = states["filter-high"];
+      }
     }
   }
 
@@ -137,6 +141,16 @@ if (filterButton) {
     manipulateUrl();
   })
 }
+
+for (const clearBtn of paramsClearers) {
+  clearBtn.addEventListener('click', () => {
+    let params = clearBtn.dataset.clear ?? "";
+    let paramsValue = "";
+    updateParams(params, paramsValue);
+    manipulateUrl();
+  })
+}
+
 
 var updateParams = (params: string, paramsValue: any) => {
   switch (params) {
