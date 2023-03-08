@@ -6,6 +6,7 @@ var search = document.getElementById('search') as HTMLInputElement;
 var searchButton = document.getElementById('search-button') as HTMLElement;
 
 var categories = document.querySelectorAll('[data-params="categories"]') as NodeListOf<HTMLDataElement>;
+var statusFilters = document.querySelectorAll('[data-params="status"]') as NodeListOf<HTMLDataElement>;
 
 var filterButton = document.querySelector('[data-params="filter"]') as HTMLDataElement;
 var filterLow = document.querySelector('#filter-low') as HTMLInputElement;
@@ -19,6 +20,7 @@ var paramsClearers = document.querySelectorAll('[data-clear]') as NodeListOf<HTM
 var states = {
   "search": URLParams.get("search") ?? "",
   "categories": URLParams.get("categories") ?? "",
+  "status": URLParams.get("status") ?? "",
   "filter": URLParams.get("filter") ?? "",
   "filter-low": URLParams.get("filter-low") ?? "",
   "filter-high": URLParams.get("filter-high") ?? "",
@@ -121,6 +123,28 @@ var updateCategoryArray = (paramsValue: string) => {
   updateParams("categories", urlCategoryString);
 }
 
+/* -------------------- *\
+
+  Status Filters
+   data-params = "status"
+   data-status-value = "packed"
+
+\* -------------------- */
+// @ts-ignore
+for (const statusFilter of statusFilters ) {
+
+  statusFilter.style.cursor = "pointer";
+  statusFilter.style.textDecoration = "underline";
+
+  statusFilter.addEventListener('click', () => {
+    let params = statusFilter.dataset.params as string ?? "";
+    let paramsValue = statusFilter.dataset.statusValue as string ?? "";
+    updateParams(params, paramsValue);
+    manipulateUrl();
+  })
+
+}
+
 
 /* -------------------- *\
 
@@ -200,14 +224,14 @@ for (const clearBtn of paramsClearers) {
 \* -------------------- */
 var updateParams = (params: string, paramsValue: any) => {
   switch (params) {
-    case "sort":
-      states["sort"] = paramsValue
+    case "search":
+      states["search"] = paramsValue
       break;
     case "categories":
       states["categories"] = paramsValue
       break;
-    case "search":
-      states["search"] = paramsValue
+    case "status":
+      states["status"] = paramsValue
       break;
     case "filter":
       states["filter"] = paramsValue
@@ -217,6 +241,9 @@ var updateParams = (params: string, paramsValue: any) => {
       break;
     case "filter-high":
       states["filter-high"] = paramsValue
+      break;
+    case "sort":
+      states["sort"] = paramsValue
       break;
     default:
     // code block
@@ -234,6 +261,7 @@ var manipulateUrl = () => {
   var stringURL =
     "?" + "search" + "=" + states["search"] +
     "&" + "categories" + "=" + states["categories"] +
+    "&" + "status" + "=" + states["status"] +
     "&" + "filter" + "=" + states["filter"] +
     "&" + "filter-low" + "=" + states["filter-low"] +
     "&" + "filter-high" + "=" + states["filter-high"] +
