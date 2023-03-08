@@ -1,10 +1,11 @@
-var _a, _b, _c, _d, _e, _f;
+var _a, _b, _c, _d, _e, _f, _g;
 var currentUrl = new URL(String(window.location));
 var URLParams = currentUrl.searchParams;
 var url = window.location.protocol;
 var search = document.getElementById('search');
 var searchButton = document.getElementById('search-button');
 var categories = document.querySelectorAll('[data-params="categories"]');
+var statusFilters = document.querySelectorAll('[data-params="status"]');
 var filterButton = document.querySelector('[data-params="filter"]');
 var filterLow = document.querySelector('#filter-low');
 var filterHigh = document.querySelector('#filter-high');
@@ -13,10 +14,11 @@ var paramsClearers = document.querySelectorAll('[data-clear]');
 var states = {
     "search": (_a = URLParams.get("search")) !== null && _a !== void 0 ? _a : "",
     "categories": (_b = URLParams.get("categories")) !== null && _b !== void 0 ? _b : "",
-    "filter": (_c = URLParams.get("filter")) !== null && _c !== void 0 ? _c : "",
-    "filter-low": (_d = URLParams.get("filter-low")) !== null && _d !== void 0 ? _d : "",
-    "filter-high": (_e = URLParams.get("filter-high")) !== null && _e !== void 0 ? _e : "",
-    "sort": (_f = URLParams.get("sort")) !== null && _f !== void 0 ? _f : ""
+    "status": (_c = URLParams.get("status")) !== null && _c !== void 0 ? _c : "",
+    "filter": (_d = URLParams.get("filter")) !== null && _d !== void 0 ? _d : "",
+    "filter-low": (_e = URLParams.get("filter-low")) !== null && _e !== void 0 ? _e : "",
+    "filter-high": (_f = URLParams.get("filter-high")) !== null && _f !== void 0 ? _f : "",
+    "sort": (_g = URLParams.get("sort")) !== null && _g !== void 0 ? _g : ""
 };
 var categoryArray = [];
 /* -------------------- *\
@@ -103,6 +105,29 @@ var updateCategoryArray = function (paramsValue) {
     var urlCategoryString = categoryArray.toString();
     updateParams("categories", urlCategoryString);
 };
+var _loop_2 = function (statusFilter) {
+    statusFilter.style.cursor = "pointer";
+    statusFilter.style.textDecoration = "underline";
+    statusFilter.addEventListener('click', function () {
+        var _a, _b;
+        var params = (_a = statusFilter.dataset.params) !== null && _a !== void 0 ? _a : "";
+        var paramsValue = (_b = statusFilter.dataset.statusValue) !== null && _b !== void 0 ? _b : "";
+        updateParams(params, paramsValue);
+        manipulateUrl();
+    });
+};
+/* -------------------- *\
+
+  Status Filters
+   data-params = "status"
+   data-status-value = "packed"
+
+\* -------------------- */
+// @ts-ignore
+for (var _h = 0, statusFilters_1 = statusFilters; _h < statusFilters_1.length; _h++) {
+    var statusFilter = statusFilters_1[_h];
+    _loop_2(statusFilter);
+}
 /* -------------------- *\
 
   Filter Buttons
@@ -139,7 +164,7 @@ if (filterButton) {
         manipulateUrl();
     });
 }
-var _loop_2 = function (sorter) {
+var _loop_3 = function (sorter) {
     sorter.style.cursor = "pointer";
     sorter.style.textDecoration = "underline";
     sorter.addEventListener('click', function () {
@@ -155,11 +180,11 @@ var _loop_2 = function (sorter) {
   data-params="sort"  data-sort-value="gh"
 \* -------------------- */
 // @ts-ignore
-for (var _g = 0, sorters_1 = sorters; _g < sorters_1.length; _g++) {
-    var sorter = sorters_1[_g];
-    _loop_2(sorter);
+for (var _j = 0, sorters_1 = sorters; _j < sorters_1.length; _j++) {
+    var sorter = sorters_1[_j];
+    _loop_3(sorter);
 }
-var _loop_3 = function (clearBtn) {
+var _loop_4 = function (clearBtn) {
     clearBtn.addEventListener('click', function () {
         var _a;
         var params = (_a = clearBtn.dataset.clear) !== null && _a !== void 0 ? _a : "";
@@ -171,35 +196,43 @@ var _loop_3 = function (clearBtn) {
 /* -------------------- *\
   Creating Clear Buttons
 \* -------------------- */
-for (var _h = 0, paramsClearers_1 = paramsClearers; _h < paramsClearers_1.length; _h++) {
-    var clearBtn = paramsClearers_1[_h];
-    _loop_3(clearBtn);
+for (var _k = 0, paramsClearers_1 = paramsClearers; _k < paramsClearers_1.length; _k++) {
+    var clearBtn = paramsClearers_1[_k];
+    _loop_4(clearBtn);
 }
 /* -------------------- *\
   Update State
 \* -------------------- */
 var updateParams = function (params, paramsValue) {
-    switch (params) {
-        case "sort":
-            states["sort"] = paramsValue;
-            break;
-        case "categories":
-            states["categories"] = paramsValue;
-            break;
-        case "search":
-            states["search"] = paramsValue;
-            break;
-        case "filter":
-            states["filter"] = paramsValue;
-            break;
-        case "filter-low":
-            states["filter-low"] = paramsValue;
-            break;
-        case "filter-high":
-            states["filter-high"] = paramsValue;
-            break;
-        default:
-        // code block
+    if (states[params] !== paramsValue) {
+        switch (params) {
+            case "search":
+                states["search"] = paramsValue;
+                break;
+            case "categories":
+                states["categories"] = paramsValue;
+                break;
+            case "status":
+                states["status"] = paramsValue;
+                break;
+            case "filter":
+                states["filter"] = paramsValue;
+                break;
+            case "filter-low":
+                states["filter-low"] = paramsValue;
+                break;
+            case "filter-high":
+                states["filter-high"] = paramsValue;
+                break;
+            case "sort":
+                states["sort"] = paramsValue;
+                break;
+            default:
+            // code block
+        }
+    }
+    else {
+        updateParams(params, "");
     }
     // console.log(states)
 };
@@ -209,6 +242,7 @@ var updateParams = function (params, paramsValue) {
 var manipulateUrl = function () {
     var stringURL = "?" + "search" + "=" + states["search"] +
         "&" + "categories" + "=" + states["categories"] +
+        "&" + "status" + "=" + states["status"] +
         "&" + "filter" + "=" + states["filter"] +
         "&" + "filter-low" + "=" + states["filter-low"] +
         "&" + "filter-high" + "=" + states["filter-high"] +
