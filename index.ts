@@ -14,6 +14,7 @@ var filterHigh = document.querySelector('#filter-high') as HTMLInputElement;
 
 
 var sorters = document.querySelectorAll('[data-params="sort"]') as NodeListOf<HTMLDataElement>;
+var pagelinks = document.querySelectorAll('[data-params="page"]') as NodeListOf<HTMLDataElement>;
 var paramsClearers = document.querySelectorAll('[data-clear]') as NodeListOf<HTMLDataElement>;
 
 
@@ -25,6 +26,7 @@ var states = {
   "filter-low": URLParams.get("filter-low") ?? "",
   "filter-high": URLParams.get("filter-high") ?? "",
   "sort": URLParams.get("sort") ?? "",
+  "page": URLParams.get("page") ?? "",
 }
 
 let categoryArray: Number[] = [];
@@ -205,6 +207,27 @@ for (const sorter of sorters) {
 
 }
 
+/* -------------------- *\
+  Pagination
+  data-params="page"  data-page-number="69"
+  data-params="page"  data-page-number="{{ current_page_number }}"
+  data-params="page"  data-page-number="{{ qs.next_page_number }}"
+\* -------------------- */
+// @ts-ignore
+for (const pagelink of pagelinks) {
+
+  pagelink.style.cursor = "pointer";
+  pagelink.style.textDecoration = "underline";
+
+  pagelink.addEventListener('click', () => {
+    let params = pagelink.dataset.params as string ?? "";
+    let paramsValue = pagelink.dataset.pageNumber as string ?? "";
+    updateParams(params, paramsValue);
+    manipulateUrl();
+  })
+
+}
+
 
 /* -------------------- *\
   Creating Clear Buttons
@@ -247,6 +270,9 @@ var updateParams = (params: string, paramsValue: any) => {
       case "sort":
         states["sort"] = paramsValue
         break;
+      case "page":
+        states["page"] = paramsValue
+        break;
       default:
       // code block
     }
@@ -271,7 +297,8 @@ var manipulateUrl = () => {
     "&" + "filter" + "=" + states["filter"] +
     "&" + "filter-low" + "=" + states["filter-low"] +
     "&" + "filter-high" + "=" + states["filter-high"] +
-    "&" + "sort" + "=" + states["sort"];
+    "&" + "sort" + "=" + states["sort"] +
+    "&" + "page" + "=" + states["page"];
 
   location.href = url + stringURL;
 }
