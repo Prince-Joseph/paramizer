@@ -2,6 +2,8 @@ var currentUrl = new URL(String(window.location));
 var URLParams = currentUrl.searchParams;
 var url = window.location.protocol;
 
+var search = document.getElementById('search') as HTMLInputElement;
+var searchButton = document.getElementById('search-button') as HTMLElement;
 var sorters = document.querySelectorAll('[data-params="sort"]') as NodeListOf<HTMLDataElement>;
 var categories = document.querySelectorAll('[data-params="categories"]') as NodeListOf<HTMLDataElement>;
 
@@ -50,7 +52,7 @@ for (const category of categories) {
 }
 
 var updateCategoryArray = (paramsValue: string) => {
-  let categoryValue  = parseInt(paramsValue) as number;
+  let categoryValue = parseInt(paramsValue) as number;
   let urlCategories = states["categories"];
   // let categoryArray: Number[] = [];
   if (urlCategories === null || urlCategories === '') {
@@ -59,13 +61,13 @@ var updateCategoryArray = (paramsValue: string) => {
   else {
 
     console.log(urlCategories);
-    
+
     let stringCategoryArray: string[] = urlCategories.toString().split(",");
     console.log(urlCategories);
     stringCategoryArray = stringCategoryArray.filter((item: string, index) => stringCategoryArray.indexOf(item) === index);
     categoryArray = stringCategoryArray.map(Number) as Number[];
   }
-  
+
   // only unique
   categoryArray = categoryArray.filter((value, index, array) => array.indexOf(value) === index);
 
@@ -76,8 +78,44 @@ var updateCategoryArray = (paramsValue: string) => {
   updateParams("categories", urlCategoryString);
 }
 
+if (search) {
+
+  function setSearchParams() {
+    let params = "search" as string ?? "";
+    let paramsValue = search.value as string ?? "";
+    updateParams(params, paramsValue);
+    manipulateUrl();
+  }
+
+  if (searchButton) {
+    searchButton.addEventListener('click', () => {
+      setSearchParams()
+    })
+  }
+
+  if (search) {
+    search.addEventListener('keypress', (event) => {
+      if (event.key === "Enter") {
+        // event.preventDefault();
+        setSearchParams();
+      }
+    })
+  }
+
+}
+
+
+
+
+
+
+
+
+
+
+
 var updateParams = (params: string, paramsValue: any) => {
-  switch(params) {
+  switch (params) {
     case "sort":
       states["sort"] = paramsValue
       break;
@@ -97,9 +135,9 @@ var updateParams = (params: string, paramsValue: any) => {
       states["filter-high"] = paramsValue
       break;
     default:
-      // code block
-    }
-    console.log(states)
+    // code block
+  }
+  console.log(states)
 }
 
 var manipulateUrl = () => {
