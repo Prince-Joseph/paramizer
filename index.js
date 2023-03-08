@@ -18,59 +18,16 @@ var states = {
     "filter-high": (_e = URLParams.get("filter-high")) !== null && _e !== void 0 ? _e : "",
     "sort": (_f = URLParams.get("sort")) !== null && _f !== void 0 ? _f : ""
 };
-console.log(states);
 var categoryArray = [];
-var _loop_1 = function (sorter) {
-    sorter.style.cursor = "pointer";
-    sorter.style.textDecoration = "underline";
-    sorter.addEventListener('click', function () {
-        var _a, _b;
-        var params = (_a = sorter.dataset.params) !== null && _a !== void 0 ? _a : "";
-        var paramsValue = (_b = sorter.dataset.sortValue) !== null && _b !== void 0 ? _b : "";
-        updateParams(params, paramsValue);
-        manipulateUrl();
-    });
-};
-// @ts-ignore
-for (var _i = 0, sorters_1 = sorters; _i < sorters_1.length; _i++) {
-    var sorter = sorters_1[_i];
-    _loop_1(sorter);
-}
-var _loop_2 = function (category) {
-    category.style.cursor = "pointer";
-    category.style.textDecoration = "underline";
-    category.addEventListener('click', function () {
-        var _a, _b;
-        var params = (_a = category.dataset.params) !== null && _a !== void 0 ? _a : "";
-        var paramsValue = (_b = category.dataset.categoriesValue) !== null && _b !== void 0 ? _b : "";
-        updateCategoryArray(paramsValue);
-        manipulateUrl();
-    });
-};
-// @ts-ignore
-for (var _g = 0, categories_1 = categories; _g < categories_1.length; _g++) {
-    var category = categories_1[_g];
-    _loop_2(category);
-}
-var updateCategoryArray = function (paramsValue) {
-    var categoryValue = parseInt(paramsValue);
-    var urlCategories = states["categories"];
-    if (urlCategories === null || urlCategories === '') {
-        categoryArray = [];
-    }
-    else {
-        var stringCategoryArray_1 = urlCategories.toString().split(",");
-        console.log(urlCategories);
-        stringCategoryArray_1 = stringCategoryArray_1.filter(function (item, index) { return stringCategoryArray_1.indexOf(item) === index; });
-        categoryArray = stringCategoryArray_1.map(Number);
-    }
-    // only unique
-    categoryArray = categoryArray.filter(function (value, index, array) { return array.indexOf(value) === index; });
-    // add or remove items
-    categoryArray.indexOf(categoryValue) === -1 ? categoryArray.push(categoryValue) : categoryArray.splice(categoryArray.indexOf(categoryValue), 1);
-    var urlCategoryString = categoryArray.toString();
-    updateParams("categories", urlCategoryString);
-};
+/* -------------------- *\
+
+  Search
+   id="search"
+
+  Search Button
+   id="search-button"
+
+\* -------------------- */
 if (search) {
     function setSearchParams() {
         var _a, _b;
@@ -96,6 +53,69 @@ if (search) {
         });
     }
 }
+var _loop_1 = function (category) {
+    category.style.cursor = "pointer";
+    category.style.textDecoration = "underline";
+    category.addEventListener('click', function () {
+        var _a, _b;
+        var params = (_a = category.dataset.params) !== null && _a !== void 0 ? _a : "";
+        var paramsValue = (_b = category.dataset.categoriesValue) !== null && _b !== void 0 ? _b : "";
+        updateCategoryArray(paramsValue);
+        manipulateUrl();
+    });
+};
+/* -------------------- *\
+
+  Individual Categories
+   data-params = "categories"
+   data-categories-value = "1"
+
+   Individual Categories
+   data-params = "categories"
+   data-categories-value = "2"
+
+   Individual Categories
+   data-params = "categories"
+   data-categories-value = "3"
+
+\* -------------------- */
+// @ts-ignore
+for (var _i = 0, categories_1 = categories; _i < categories_1.length; _i++) {
+    var category = categories_1[_i];
+    _loop_1(category);
+}
+var updateCategoryArray = function (paramsValue) {
+    var categoryValue = parseInt(paramsValue);
+    var urlCategories = states["categories"];
+    if (urlCategories === null || urlCategories === '') {
+        categoryArray = [];
+    }
+    else {
+        var stringCategoryArray_1 = urlCategories.toString().split(",");
+        console.log(urlCategories);
+        stringCategoryArray_1 = stringCategoryArray_1.filter(function (item, index) { return stringCategoryArray_1.indexOf(item) === index; });
+        categoryArray = stringCategoryArray_1.map(Number);
+    }
+    // only unique
+    categoryArray = categoryArray.filter(function (value, index, array) { return array.indexOf(value) === index; });
+    // add or remove items
+    categoryArray.indexOf(categoryValue) === -1 ? categoryArray.push(categoryValue) : categoryArray.splice(categoryArray.indexOf(categoryValue), 1);
+    var urlCategoryString = categoryArray.toString();
+    updateParams("categories", urlCategoryString);
+};
+/* -------------------- *\
+
+  Filter Buttons
+   data-params = "filter"
+   data-filter-value = "price"
+
+  FilterLow Input
+  id="filter-low"
+
+  FilterHigh Input
+  id="filter-high"
+
+\* -------------------- */
 if (filterButton) {
     if (states["filter"] !== "") {
         if (filterLow) {
@@ -119,6 +139,26 @@ if (filterButton) {
         manipulateUrl();
     });
 }
+var _loop_2 = function (sorter) {
+    sorter.style.cursor = "pointer";
+    sorter.style.textDecoration = "underline";
+    sorter.addEventListener('click', function () {
+        var _a, _b;
+        var params = (_a = sorter.dataset.params) !== null && _a !== void 0 ? _a : "";
+        var paramsValue = (_b = sorter.dataset.sortValue) !== null && _b !== void 0 ? _b : "";
+        updateParams(params, paramsValue);
+        manipulateUrl();
+    });
+};
+/* -------------------- *\
+  Sort Lists
+  data-params="sort"  data-sort-value="gh"
+\* -------------------- */
+// @ts-ignore
+for (var _g = 0, sorters_1 = sorters; _g < sorters_1.length; _g++) {
+    var sorter = sorters_1[_g];
+    _loop_2(sorter);
+}
 var _loop_3 = function (clearBtn) {
     clearBtn.addEventListener('click', function () {
         var _a;
@@ -128,10 +168,16 @@ var _loop_3 = function (clearBtn) {
         manipulateUrl();
     });
 };
+/* -------------------- *\
+  Creating Clear Buttons
+\* -------------------- */
 for (var _h = 0, paramsClearers_1 = paramsClearers; _h < paramsClearers_1.length; _h++) {
     var clearBtn = paramsClearers_1[_h];
     _loop_3(clearBtn);
 }
+/* -------------------- *\
+  Update State
+\* -------------------- */
 var updateParams = function (params, paramsValue) {
     switch (params) {
         case "sort":
@@ -155,8 +201,11 @@ var updateParams = function (params, paramsValue) {
         default:
         // code block
     }
-    console.log(states);
+    // console.log(states)
 };
+/* -------------------- *\
+  redirection function
+\* -------------------- */
 var manipulateUrl = function () {
     var stringURL = "?" + "search" + "=" + states["search"] +
         "&" + "categories" + "=" + states["categories"] +
