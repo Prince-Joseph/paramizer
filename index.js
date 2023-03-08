@@ -82,6 +82,9 @@ if (search) {
         });
     }
     if (search) {
+        if (states["search"]) {
+            search.value = states["search"];
+        }
         search.addEventListener('keypress', function (event) {
             if (event.key === "Enter") {
                 // event.preventDefault();

@@ -93,7 +93,11 @@ if (search) {
     })
   }
 
+
   if (search) {
+    if (states["search"]){
+      search.value = states["search"];
+    }
     search.addEventListener('keypress', (event) => {
       if (event.key === "Enter") {
         // event.preventDefault();
@@ -103,16 +107,6 @@ if (search) {
   }
 
 }
-
-
-
-
-
-
-
-
-
-
 
 var updateParams = (params: string, paramsValue: any) => {
   switch (params) {
