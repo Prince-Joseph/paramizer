@@ -204,30 +204,35 @@ for (var _k = 0, paramsClearers_1 = paramsClearers; _k < paramsClearers_1.length
   Update State
 \* -------------------- */
 var updateParams = function (params, paramsValue) {
-    switch (params) {
-        case "search":
-            states["search"] = paramsValue;
-            break;
-        case "categories":
-            states["categories"] = paramsValue;
-            break;
-        case "status":
-            states["status"] = paramsValue;
-            break;
-        case "filter":
-            states["filter"] = paramsValue;
-            break;
-        case "filter-low":
-            states["filter-low"] = paramsValue;
-            break;
-        case "filter-high":
-            states["filter-high"] = paramsValue;
-            break;
-        case "sort":
-            states["sort"] = paramsValue;
-            break;
-        default:
-        // code block
+    if (states[params] !== paramsValue) {
+        switch (params) {
+            case "search":
+                states["search"] = paramsValue;
+                break;
+            case "categories":
+                states["categories"] = paramsValue;
+                break;
+            case "status":
+                states["status"] = paramsValue;
+                break;
+            case "filter":
+                states["filter"] = paramsValue;
+                break;
+            case "filter-low":
+                states["filter-low"] = paramsValue;
+                break;
+            case "filter-high":
+                states["filter-high"] = paramsValue;
+                break;
+            case "sort":
+                states["sort"] = paramsValue;
+                break;
+            default:
+            // code block
+        }
+    }
+    else {
+        updateParams(params, "");
     }
     // console.log(states)
 };
