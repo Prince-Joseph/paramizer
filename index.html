@@ -11,20 +11,27 @@
 <body>
     <input type="text" id="search">
     <button id="search-button">Search</button>
+    <button data-clear="search">clear</button>
+    
     <p data-params="sort"  data-sort-value="gh" type="text">sort up</p>
 
     <p data-params="sort"  data-sort-value="gl" type="text">sort down</p>
-
+    
+    <button data-clear="sort">clear</button>
+    
     <div>
         <p data-params="categories" data-categories-value="1">1</p>
         <p data-params="categories" data-categories-value="2">2</p>
         <p data-params="categories" data-categories-value="3">3</p>
+        <button data-clear="categories">clear</button>
     </div>
 
     <div>
         <input type="text" id="filter-low">
         <input type="text" id="filter-high">
         <button data-params="filter" data-filter-value="p">Filter!</button>
+       
+        <button data-clear="filter">clear</button>
 
     </div>
 </body>

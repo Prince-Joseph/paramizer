@@ -9,6 +9,7 @@ var filterButton = document.querySelector('[data-params="filter"]');
 var filterLow = document.querySelector('#filter-low');
 var filterHigh = document.querySelector('#filter-high');
 var sorters = document.querySelectorAll('[data-params="sort"]');
+var paramsClearers = document.querySelectorAll('[data-clear]');
 var states = {
     "search": (_a = URLParams.get("search")) !== null && _a !== void 0 ? _a : "",
     "categories": (_b = URLParams.get("categories")) !== null && _b !== void 0 ? _b : "",
@@ -96,14 +97,16 @@ if (search) {
     }
 }
 if (filterButton) {
-    if (filterLow) {
-        if (states["filter-low"]) {
-            filterLow.value = states["filter-low"];
+    if (states["filter"] !== "") {
+        if (filterLow) {
+            if (states["filter-low"]) {
+                filterLow.value = states["filter-low"];
+            }
         }
-    }
-    if (filterHigh) {
-        if (states["filter-high"]) {
-            filterHigh.value = states["filter-high"];
+        if (filterHigh) {
+            if (states["filter-high"]) {
+                filterHigh.value = states["filter-high"];
+            }
         }
     }
     filterButton.addEventListener('click', function () {
@@ -115,6 +118,19 @@ if (filterButton) {
         updateParams(params, paramsValue);
         manipulateUrl();
     });
+}
+var _loop_3 = function (clearBtn) {
+    clearBtn.addEventListener('click', function () {
+        var _a;
+        var params = (_a = clearBtn.dataset.clear) !== null && _a !== void 0 ? _a : "";
+        var paramsValue = "";
+        updateParams(params, paramsValue);
+        manipulateUrl();
+    });
+};
+for (var _h = 0, paramsClearers_1 = paramsClearers; _h < paramsClearers_1.length; _h++) {
+    var clearBtn = paramsClearers_1[_h];
+    _loop_3(clearBtn);
 }
 var updateParams = function (params, paramsValue) {
     switch (params) {
