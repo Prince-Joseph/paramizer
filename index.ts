@@ -24,26 +24,62 @@ var states = {
   "filter-high": URLParams.get("filter-high") ?? "",
   "sort": URLParams.get("sort") ?? "",
 }
-console.log(states);
-
 
 let categoryArray: Number[] = [];
 
+/* -------------------- *\
 
-// @ts-ignore
-for (const sorter of sorters) {
+  Search
+   id="search"
 
-  sorter.style.cursor = "pointer";
-  sorter.style.textDecoration = "underline";
+  Search Button
+   id="search-button"
 
-  sorter.addEventListener('click', () => {
-    let params = sorter.dataset.params as string ?? "";
-    let paramsValue = sorter.dataset.sortValue as string ?? "";
+\* -------------------- */
+if (search) {
+
+  function setSearchParams() {
+    let params = "search" as string ?? "";
+    let paramsValue = search.value as string ?? "";
     updateParams(params, paramsValue);
     manipulateUrl();
-  })
+  }
+
+  if (searchButton) {
+    searchButton.addEventListener('click', () => {
+      setSearchParams()
+    })
+  }
+
+  if (search) {
+    if (states["search"]) {
+      search.value = states["search"];
+    }
+    search.addEventListener('keypress', (event) => {
+      if (event.key === "Enter") {
+        // event.preventDefault();
+        setSearchParams();
+      }
+    })
+  }
 
 }
+
+/* -------------------- *\
+
+  Individual Categories
+   data-params = "categories"
+   data-categories-value = "1"
+
+   Individual Categories
+   data-params = "categories"
+   data-categories-value = "2"
+
+   Individual Categories
+   data-params = "categories"
+   data-categories-value = "3"
+
+\* -------------------- */
 
 // @ts-ignore
 for (const category of categories) {
@@ -85,40 +121,22 @@ var updateCategoryArray = (paramsValue: string) => {
   updateParams("categories", urlCategoryString);
 }
 
-if (search) {
 
-  function setSearchParams() {
-    let params = "search" as string ?? "";
-    let paramsValue = search.value as string ?? "";
-    updateParams(params, paramsValue);
-    manipulateUrl();
-  }
+/* -------------------- *\
 
-  if (searchButton) {
-    searchButton.addEventListener('click', () => {
-      setSearchParams()
-    })
-  }
+  Filter Buttons
+   data-params = "filter"
+   data-filter-value = "price"
 
-  if (search) {
-    if (states["search"]) {
-      search.value = states["search"];
-    }
-    search.addEventListener('keypress', (event) => {
-      if (event.key === "Enter") {
-        // event.preventDefault();
-        setSearchParams();
-      }
-    })
-  }
+  FilterLow Input
+  id="filter-low"
 
-}
+  FilterHigh Input
+  id="filter-high"
 
-
+\* -------------------- */
 if (filterButton) {
-
   if (states["filter"] !== "") {
-
     if (filterLow) {
       if (states["filter-low"]) {
         filterLow.value = states["filter-low"];
@@ -142,6 +160,30 @@ if (filterButton) {
   })
 }
 
+
+/* -------------------- *\
+  Sort Lists
+  data-params="sort"  data-sort-value="gh"
+\* -------------------- */
+// @ts-ignore
+for (const sorter of sorters) {
+
+  sorter.style.cursor = "pointer";
+  sorter.style.textDecoration = "underline";
+
+  sorter.addEventListener('click', () => {
+    let params = sorter.dataset.params as string ?? "";
+    let paramsValue = sorter.dataset.sortValue as string ?? "";
+    updateParams(params, paramsValue);
+    manipulateUrl();
+  })
+
+}
+
+
+/* -------------------- *\
+  Creating Clear Buttons
+\* -------------------- */
 for (const clearBtn of paramsClearers) {
   clearBtn.addEventListener('click', () => {
     let params = clearBtn.dataset.clear ?? "";
@@ -152,6 +194,10 @@ for (const clearBtn of paramsClearers) {
 }
 
 
+
+/* -------------------- *\
+  Update State
+\* -------------------- */
 var updateParams = (params: string, paramsValue: any) => {
   switch (params) {
     case "sort":
@@ -175,9 +221,14 @@ var updateParams = (params: string, paramsValue: any) => {
     default:
     // code block
   }
-  console.log(states)
+  // console.log(states)
 }
 
+
+
+/* -------------------- *\
+  redirection function
+\* -------------------- */
 var manipulateUrl = () => {
 
   var stringURL =
